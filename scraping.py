@@ -13,15 +13,17 @@ def scrape_all():
 
     news_title, news_paragraph = mars_news(browser)
 
+    hemisphere_image_urls = mars_hemispheres()
+
     # Run all scraping functions and store results in a dictionary
     data = {
         "news_title": news_title,
         "news_paragraph": news_paragraph,
         "featured_image": featured_image(browser),
         "facts": mars_facts(),
-        "last_modified": dt.datetime.now()
+        "last_modified": dt.datetime.now(),
+        "hemisphere_image_urls" : hemisphere_image_urls
     }
-
     # Stop webdriver and return data
     browser.quit()
     return data
@@ -96,6 +98,34 @@ def mars_facts():
 
     # Convert dataframe into HTML format, add bootstrap
     return df.to_html(classes="table table-striped")
+
+
+def mars_hemispheres():
+    # Set the executable path and initialize Splinter
+    executable_path = {'executable_path': ChromeDriverManager().install()}
+    browser = Browser('chrome', **executable_path)
+    
+    # 1. Use browser to visit the URL 
+    url = 'https://data-class-mars-hemispheres.s3.amazonaws.com/Mars_Hemispheres/index.html'
+    browser.visit(url)
+    
+    # 2. Create a list to hold the images and titles.
+    hemisphere_image_urls = []
+    # Only grab the a's that have h3's as their children
+    a_hrefs = [(a.find_by_tag('a')['href'], a.find_by_tag('h3').text) for a in browser.find_by_css('.description')]
+    
+    # 3. Write code to retrieve the image urls and titles for each hemisphere.
+    # Make a list that will hold dictionaries
+    hemisphere_image_urls = []
+    for a_href, a_text in a_hrefs:
+        browser.visit(a_href)
+        hemisphere_image_urls.append({'img_url': browser.find_by_text('Sample')[0]['href'],
+        'title': a_text})
+        browser.visit(url)
+
+    # 4. Print the list that holds the dictionary of each image url and title.
+    return hemisphere_image_urls
+
 
 if __name__ == "__main__":
 
