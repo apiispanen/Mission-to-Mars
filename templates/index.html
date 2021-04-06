@@ -9,6 +9,7 @@
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
     />
+
   </head>
   <body>
     <div class="container">
@@ -16,7 +17,7 @@
       <div class="jumbotron text-center">
         <h1>Mission to Mars</h1>
         <!-- Add a button to activate scraping script -->
-        <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Data</a></p>
+        <p><a class="btn btn-warning btn-lg btn-block" href="/scrape" role="button">Scrape New Data</a></p>
       </div>
 
       <!-- Add section for Mars News -->
@@ -45,10 +46,10 @@
           />
         </div>
 
-        <div class="col-md-4">
+        <div class="container col-md-4">
           <!-- Mars Facts -->
-          <div class="row" id="mars-facts">
-            <h4>Mars Facts</h4>
+          <div class="row" id="mars-facts" style="padding:10px; box-shadow: 5px grey;">
+            <h4 style="font-weight: 800;">Mars Facts</h4>
             {{ mars.facts | safe }}
           </div>
         </div>
@@ -57,7 +58,7 @@
       <!-- Section for Mars Hemispheres -->
       <div class="row" id="mars-hemispheres">
         <div class="page-header">
-          <h2 class="text-center">Mars Hemispheres</h2>
+          <h2 class="text-center text-uppercase">Mars Hemispheres</h2>
         </div>
         
         {% for hemisphere in mars.hemisphere_image_urls %}
@@ -65,7 +66,7 @@
           <div class="thumbnail">
             <img src="{{hemisphere.img_url | default('static/images/error.png', true)}}" alt="...">
             <div class="caption">
-              <h3>{{hemisphere.title}}</h3>
+              <h3 style="font-weight:100; color:rgb(61, 61, 61); letter-spacing: .5px; text-align: center;">{{hemisphere.title}}</h3>
             </div>
           </div>
         </div>
